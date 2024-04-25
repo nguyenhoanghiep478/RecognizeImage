@@ -3,7 +3,7 @@ import io
 import timm
 import matplotlib.pyplot as plt
 from ultralytics import YOLO
-
+import requests
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFileDialog,QSplitter
 from PyQt5.QtGui import QPixmap, QImage
@@ -289,6 +289,23 @@ class ImageSelector(QWidget):
             self.displayTopRightImage(img_path)
             self.displayText(predictions)
             self.displayVisualizedImage(img_path,predictions)
+    def displayTranslate(self,word):
+        url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+
+        payload = {
+            "q": word,
+            "target": "vi",
+            "source": "en"
+        }
+        headers = {
+            "content-type": "application/x-www-form-urlencoded",
+            "Accept-Encoding": "application/gzip",
+            "X-RapidAPI-Key": "f5efa31a8fmshea51248983501ddp19cdaejsn29532745f902",
+            "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
+        }
+
+        response = requests.post(url, data=payload, headers=headers)
+        return response.json()["data"]["translations"][0]["translatedText"]
 
     def displayVisualizedImage(self, img_path, predictions):
         pixmap = visualize_detections(Image.open(img_path), predictions)
@@ -308,8 +325,8 @@ class ImageSelector(QWidget):
     def displayText(self, predictions):
         text = ""
         for _, _, _, transcribed_text in predictions:
-            text += transcribed_text[0] + "\n"
-        self.text_label.setText("Văn bản phân tích:\n" + text)
+            text += transcribed_text[0]+": "+self.displayTranslate(transcribed_text[0]) + "\n"
+        self.text_label.setText("Văn bản phân tích:\n" + text )
 
 
 if __name__ == "__main__":
