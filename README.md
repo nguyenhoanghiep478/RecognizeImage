@@ -23,7 +23,10 @@ Cài đặt các thư viện bằng lệnh sau:
 2.Chuyển đến thư mục của dự án:
 
         cd RecognizeImage
-3.Chạy ứng dụng:
+3.Tải về 2 file :
+    
+       https://drive.google.com/drive/folders/1TS5eZLMgsqjF_KScDNzz0XuC3aYADjDc
+4.Chạy ứng dụng:
         
         python main.py
 
